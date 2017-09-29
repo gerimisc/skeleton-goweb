@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/sugiantoaudi/skeleton-goweb/init"
 	"log"
+	"net/http"
 	"os"
 )
 
@@ -29,6 +30,10 @@ func init() {
 	flag.StringVar(&connectionString, "connection", "", "Connection string info")
 
 	flag.Parse()
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "INDEX PAGE!") // send data to client side
 }
 
 func main() {
@@ -70,4 +75,10 @@ func main() {
 
 	}
 
+	// Initialize a TCP listener on the default HTTP port 80
+	http.HandleFunc("/", index)
+	err := http.ListenAndServe(":80", nil) // set listen port
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 }
